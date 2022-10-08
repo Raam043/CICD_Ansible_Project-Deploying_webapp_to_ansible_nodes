@@ -20,7 +20,7 @@
       name: httpd
       state: started
   handlers:
-    - name: restart apache
+   - name: restart apache
       service:
         name: httpd
         state: restarted
