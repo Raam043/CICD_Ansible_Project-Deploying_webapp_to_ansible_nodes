@@ -1,7 +1,7 @@
 --- 
 - 
   become: true
-  hosts: webserver
+  hosts: webservers
   name: "Install Apache Tomcat10 using ansible"
   remote_user: ubuntu
   tasks: 
