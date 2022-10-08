@@ -1,0 +1,62 @@
+--- 
+- 
+  become: true
+  hosts: webserver
+  name: "Install Apache Tomcat10 using ansible"
+  remote_user: ubuntu
+  tasks: 
+    - 
+      apt: 
+        update_cache: true
+        upgrade: true
+      name: "Update the System Packages"
+    - 
+      name: "Create a Tomcat User"
+      user: 
+        name: tomcat
+    - 
+      group: 
+        name: tomcat
+      name: "Create a Tomcat Group"
+    - 
+      apt: 
+        name: default-jdk
+        state: present
+      name: "Install JAVA"
+    - 
+      file: 
+        group: tomcat
+        mode: 755
+        owner: tomcat
+        path: /opt/tomcat10
+        recurse: true
+      name: "Create a Tomcat Directory"
+    - 
+      name: "download & unarchive tomcat10"
+      unarchive: 
+        dest: /opt/tomcat10
+        extra_opts: 
+          - "--strip-components=1"
+        remote_src: true
+        src: "https://mirrors.estointernet.in/apache/tomcat/tomcat-10/v10.0.4/bin/apache-tomcat- 10.0.4.tar.gz"
+    - 
+      file: 
+        group: tomcat
+        mode: "u+rwx,g+rx,o=rx"
+        owner: tomcat
+        path: /opt/tomcat10
+        recurse: true
+        state: directory
+      name: "Change ownership of tomcat directory"
+    - 
+      copy: 
+        dest: /etc/systemd/system/
+        mode: 493
+        src: /etc/tomcat.service
+      name: "Copy Tomcat service from local to remote"
+    - 
+      name: "Start and Enable Tomcat 10 on sever"
+      systemd: 
+        daemon_reload: true
+        name: tomcat
+        state: started
