@@ -1,1 +1,1 @@
-# Git-jenkins-ansible = httpd webapp
+# Git-jenkins-ansible-ansible_nodes = httpd webapp
